@@ -1,32 +1,36 @@
-import crypto from 'node:crypto';
+import { prisma } from '../prisma';
 
 export interface User {
   id?: number;
   name: string;
   email: string;
   password: string;
-  phone: string;
-  cpf: string;
+  phone?: string;
+  cpf?: string;
   isBan?: boolean;
 }
 
 export class CreateUserModel {
-  static users: User[] = [];
+  async newUser(data: User) {
+    const userAlreadyExists = await prisma.client.findUnique({
+      where: {
+        email: data.email
+      }
+    });
 
-  newUser(data: User) {
-    const id = new Date().getTime();
-
-    const user = {
-      id: id,
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      phone: data.phone,
-      cpf: data.cpf,
-      isBan: false
+    if(userAlreadyExists) {
+      throw new Error();
     }
 
-    CreateUserModel.users.push(user);
+    const user = await prisma.client.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        cpf: data.cpf,
+      }
+    });
 
     return user;
   }
