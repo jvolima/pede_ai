@@ -3,7 +3,7 @@ import { CreateRestaurantModel } from "../models/CreateRestaurantModel";
 
 export class CreateRestaurantController{
     async handle(Request: Request, Response: Response){
-        const {name, cnpj} = request.body;
+        const {name, cnpj} = request.body; // falta a logo
 
         const createRestaurantModel = new CreateRestaurantModel(); 
 
@@ -12,6 +12,6 @@ export class CreateRestaurantController{
             cnpj
         };
        
-        const restaurant = await CreateRestaurantModel.newRestaurant(data);
+        const restaurant = await createRestaurantModel.newRestaurant(data);
     }
 }

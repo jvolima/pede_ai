@@ -2,15 +2,17 @@ import { prisma } from "../prisma";
 // importar os erros tmb
 
 export interface Restaurant{
-    id?: number; // lembrar de perguntar pro jao
+    id?: string; 
     name: string; 
-    cnpj: string; // lembrar de perguntar da logo pro jao
+    cnpj: string;
     isAproved?: boolean;
 }
 
 export class CreateRestaurantModel{
     async newRestaurant(data: Restaurant){
-        const restaurant = await prisma.client.create({
+        
+
+        const restaurant = await prisma.restaurant.create({
             data: {
                 name: data.name,
                 cnpj: data.cnpj,
