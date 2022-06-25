@@ -21,3 +21,12 @@ model Client {
 
   @@map("clients")
 }
+
+model Restaurant{
+  id        String @id @default(uuid())
+  name      String
+  cnpj      String @unique
+  isAproved Boolean @default(false)
+
+  @@map("restaurants")
+}
