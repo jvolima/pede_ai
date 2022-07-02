@@ -1,5 +1,5 @@
+import { AppError } from "../errors/AppError";
 import { prisma } from "../prisma";
-// importar os erros tmb
 
 export interface Restaurant{
     id?: string; 
@@ -11,11 +11,28 @@ export interface Restaurant{
 export class CreateRestaurantModel{
     async newRestaurant(data: Restaurant){
         
+        const cnpjAlreadyExist = await prisma.restaurant.findUnique({
+            where: {
+                cnpj: data.cnpj.trim()
+            }
+        });
+
+        if(data.name.trim() === ""){
+            throw new AppError('Invalid name');
+        }
+
+        if(data.cnpj.trim() === ""){
+            throw new AppError('Invalid cnpj');
+        }
+
+        if(cnpjAlreadyExist){
+            throw new AppError('Restaurant with this cnpj already exists');
+        }
 
         const restaurant = await prisma.restaurant.create({
             data: {
-                name: data.name,
-                cnpj: data.cnpj,
+                name: data.name.trim(),
+                cnpj: data.cnpj.trim(),
                 isAproved: data.isAproved,
             }
     });
